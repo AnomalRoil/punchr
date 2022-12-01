@@ -5,6 +5,13 @@ import (
 	"database/sql"
 	"embed"
 	"fmt"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"sort"
+	"strconv"
+	"strings"
+
 	"github.com/dennis-tra/punchr/pkg/udger"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -19,12 +26,6 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
-	"io/fs"
-	"os"
-	"path/filepath"
-	"sort"
-	"strconv"
-	"strings"
 
 	"github.com/dennis-tra/punchr/pkg/maxmind"
 	"github.com/dennis-tra/punchr/pkg/models"
@@ -107,6 +108,11 @@ func (c *Client) applyMigrations(ctx *cli.Context, dbh *sql.DB) {
 	log.WithField("dir", tmpDir).Debugln("Created temporary directory")
 
 	err = fs.WalkDir(migrations, ".", func(path string, d fs.DirEntry, err error) error {
+		// The err argument reports an error related to path, signaling that WalkDir will not walk into that directory,
+		// returning the error will cause WalkDir to stop walking the entire tree
+		if err != nil {
+			return err
+		}
 		join := filepath.Join(tmpDir, path)
 		if d.IsDir() {
 			return os.MkdirAll(join, 0o755)

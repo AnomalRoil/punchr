@@ -21,6 +21,7 @@ func TestHost_filter(t *testing.T) {
 	assert.Len(t, filtered, 0)
 
 	maddr1, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/1234")
+	require.NoError(t, err)
 	maddr2, err := multiaddr.NewMultiaddr("/ip6/::1/udp/1234/quic")
 	require.NoError(t, err)
 

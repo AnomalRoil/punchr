@@ -274,6 +274,9 @@ func (s Server) TrackHolePunch(ctx context.Context, req *pb.TrackHolePunchReques
 	}
 
 	clientExists, err := models.Clients(models.ClientWhere.PeerID.EQ(dbLocalPeer.ID)).Exists(ctx, s.DBClient)
+	if err != nil {
+		return nil, errors.Wrap(err, "error checking client existence")
+	}
 	if !clientExists {
 		return nil, fmt.Errorf("client not registered")
 	}

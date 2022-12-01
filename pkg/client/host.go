@@ -217,9 +217,7 @@ func (h *Host) ProtocolFilters() []int32 {
 	h.protocolFiltersLk.RLock()
 	defer h.protocolFiltersLk.RUnlock()
 	filters := make([]int32, len(h.protocolFilters))
-	for i, pf := range h.protocolFilters {
-		filters[i] = pf
-	}
+	copy(filters, h.protocolFilters)
 	return filters
 }
 

@@ -140,7 +140,7 @@ func RootAction(c *cli.Context) error {
 	}
 
 	// Initialize gRPC server
-	s, lis, err := initGrpcServer(c, err)
+	s, lis, err := initGrpcServer(c)
 	if err != nil {
 		return err
 	}
@@ -186,7 +186,7 @@ func serveTelemetry(c *cli.Context) {
 	}
 }
 
-func initGrpcServer(c *cli.Context, err error) (*grpc.Server, net.Listener, error) {
+func initGrpcServer(c *cli.Context) (*grpc.Server, net.Listener, error) {
 	logger := log.StandardLogger()
 	logger.SetLevel(log.DebugLevel)
 	logEntry := log.NewEntry(logger)
