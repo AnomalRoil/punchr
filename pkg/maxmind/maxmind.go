@@ -164,9 +164,7 @@ func resolveAddrs(ctx context.Context, maddr ma.Multiaddr) []string {
 		}
 
 		// add the results to the toResolve list.
-		for _, res := range resaddrs {
-			toResolve = append(toResolve, res)
-		}
+		toResolve = append(toResolve, resaddrs...)
 	}
 
 	addrsMap := map[string]string{}

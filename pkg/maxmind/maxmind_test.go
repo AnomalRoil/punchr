@@ -84,16 +84,17 @@ func TestClient_MaddrCountry(t *testing.T) {
 		//{addr: "/dns4/k8s-dev-ipfsp2pt-c0b76d02d7-969229bd37f82282.elb.ca-central-1.amazonaws.com/tcp/4001", want: "", wantErr: true},
 	}
 	for _, tt := range tests {
+		localClient := client
 		t.Run(fmt.Sprintf("%s | iso: %s | err: %v", tt.addr, tt.wantCountry, tt.wantErr), func(t *testing.T) {
 			maddr, err := ma.NewMultiaddr(tt.addr)
 			require.NoError(t, err)
 
-			got, err := client.MaddrInfo(context.Background(), maddr)
+			got, err := localClient.MaddrInfo(context.Background(), maddr)
 			if tt.wantErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.wantCountry, got[tt.wantAddr])
+				assert.Equal(t, tt.wantCountry, got[tt.wantAddr].Country)
 			}
 		})
 	}
